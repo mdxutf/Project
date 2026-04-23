@@ -17,6 +17,17 @@ class MAR{
     int MPB = 0;
 };
 
+class TXN {
+public:
+    int MemNum = 0;
+    string Type = "";
+    int Points = 0;
+    string Desc = "";
+};
+
+vector<TXN> gTransactions;
+string gSystemDate = "";
+
 void R0(){
 
     cout<<"Welcome Message designed by your group" <<endl;
@@ -59,6 +70,8 @@ void R1(vector <MAR> MAR){
 
 }
 
+
+
 void R4(vector <MAR> MAR){
 
     int acc = 0;
@@ -97,6 +110,116 @@ void R4(vector <MAR> MAR){
     cout<<"Option (1 - 5):";
 
 }
+//R5: Generate Daily Statement
+void R5(vector<MAR> MAR) {
+
+    int acc = 0;
+    cout << "Enter Member Number: ";
+    cin >> acc;
+
+    bool Found = false;
+    int idx = 0;
+
+    for (int i = 0; i < MAR.size(); i++) {
+        if (MAR[i].MemNum == acc) {
+            Found = true;
+            idx = i;
+            break;
+        }
+    }
+
+    if (!Found) {
+        cout << "Such Member Number does not exist." << endl;
+        return;
+    }
+
+    cout << "Member Name: " << MAR[idx].MemName << endl;
+    cout << "Member Number: " << MAR[idx].MemNum << endl;
+    cout << "Statement Date: " << gSystemDate << endl;
+    cout << "----------------------------------------------------------------" << endl;
+
+    cout << "Transaction Summary:" << endl;
+    cout << left << setw(16) << "Type"
+        << setw(10) << "Mileage"
+        << setw(30) << "Description" << endl;
+
+    bool anyTxn = false;
+    for (int i = 0; i < gTransactions.size(); i++) {
+        if (gTransactions[i].MemNum == acc) {
+            cout << left << setw(16) << gTransactions[i].Type
+                << setw(10) << gTransactions[i].Points
+                << setw(30) << gTransactions[i].Desc << endl;
+            anyTxn = true;
+        }
+    }
+
+    if (!anyTxn) {
+        cout << "(No transactions recorded)" << endl;
+    }
+
+    cout << "----------------------------------------------------------------" << endl;
+
+    cout << "Upcoming Itinerary:" << endl;
+    cout << left << setw(14) << "Origin"
+        << setw(14) << "Destination"
+        << setw(10) << "Flight"
+        << setw(12) << "Cabin"
+        << setw(12) << "Departure" << endl;
+    cout << "(No flight record vector available yet)" << endl;
+    cout << "----------------------------------------------------------------" << endl;
+
+    int bonusPct = 0;
+    if (MAR[idx].MemTier == "Silver") {
+        bonusPct = 2;
+    }
+    else if (MAR[idx].MemTier == "Gold") {
+        bonusPct = 4;
+    }
+    else if (MAR[idx].MemTier == "Diamond") {
+        bonusPct = 6;
+    }
+
+    cout << "Member Account Summary:" << endl;
+    cout << left << setw(40) << "Total Mileage Points Balance" << ": " << MAR[idx].MPB << endl;
+    cout << left << setw(40) << "Member Tier" << ": " << MAR[idx].MemTier << endl;
+    cout << left << setw(40) << "Bonus Mileage Points" << ": " << bonusPct << "%" << endl;
+}
+//R6: Credits and Exit
+void R6() {
+
+    char confirm;
+
+    do {
+        cout << "Exit the program? (Y/N): ";
+        cin >> confirm;
+
+        if (confirm != 'Y' && confirm != 'y' && confirm != 'N' && confirm != 'n') {
+            cout << "Invalid input. Please enter Y or N." << endl;
+        }
+
+    } while (confirm != 'Y' && confirm != 'y' && confirm != 'N' && confirm != 'n');
+
+    if (confirm == 'N' || confirm == 'n') {
+        cout << "Exit cancelled. Returning to Main Menu." << endl;
+        return;
+    }
+	// Display group member particulars, changing the details below to your actual group member particulars
+    cout << "================================================================" << endl;
+    cout << "                         Credits                                " << endl;
+    cout << "================================================================" << endl;
+    cout << left << setw(25) << "Student Name"
+        << setw(15) << "Student No."
+        << setw(10) << "Tutorial" << endl;
+    cout << "----------------------------------------------------------------" << endl;
+    cout << left << setw(25) << "Member Name 1" << setw(15) << "12345671" << setw(10) << "TUT01" << endl;
+    cout << left << setw(25) << "Member Name 2" << setw(15) << "12345672" << setw(10) << "TUT01" << endl;
+    cout << left << setw(25) << "Member Name 3" << setw(15) << "12345673" << setw(10) << "TUT01" << endl;
+    cout << left << setw(25) << "Member Name 4" << setw(15) << "12345674" << setw(10) << "TUT01" << endl;
+    cout << left << setw(25) << "Member Name 5" << setw(15) << "12345675" << setw(10) << "TUT01" << endl;
+    cout << "================================================================" << endl;
+
+    exit(0);
+}
 
 int main(){
 
@@ -129,6 +252,10 @@ int main(){
         R4(MAR);
         break;
         case 5:
+		R5(MAR);
+        break;
+        case 6:
+        R6();
         break;
         default:
         cout<<"No Such Selection";
