@@ -17,6 +17,18 @@ class MAR{
     int MPB = 0;
 };
 
+class FLR {
+public:
+    int MemNum = 0;
+    string Origin = "";
+    string Destination = "";
+    string FlightNum = "";
+    string CabinClass = "";
+    string DepartureDate = "";
+    string CreationDate = "";
+    bool Updated = false;
+};
+
 class TXN {
 public:
     int MemNum = 0;
