@@ -7,8 +7,8 @@
 
 using namespace std;
 
-class MAR{
-    public:
+class MAR {
+public:
     int MemNum = 0;
     string MemTier = "";
     string PassNum = "";
@@ -36,41 +36,48 @@ public:
     int Points = 0;
     string Desc = "";
 };
-
+vector<MAR> gMember;
+vector<FLR> gFlights;
 vector<TXN> gTransactions;
 string gSystemDate = "";
 
-void R0(){
+void R0() {
 
-    cout<<"Welcome Message designed by your group" <<endl;
-    cout<<"*** FFP Main Menu ***"<<endl;
-    cout<<"[1] Load Starting Data"<<endl;
-    cout<<"[2] Show All Member Accounts"<<endl;
-    cout<<"[3] Open or Close Member Account"<<endl;
-    cout<<"[4] Member Account Operations"<<endl;
-    cout<<"[5] Generate Daily Statement"<<endl;
-    cout<<"[6] Credits and Exit"<<endl;
-    cout<<"********************************"<<endl;
-    cout<<"Option (1 - 6):";
+    cout << "Welcome Message designed by your group" << endl;
+    cout << "*** FFP Main Menu ***" << endl;
+    cout << "[1] Load Starting Data" << endl;
+    cout << "[2] Show All Member Accounts" << endl;
+    cout << "[3] Open or Close Member Account" << endl;
+    cout << "[4] Member Account Operations" << endl;
+    cout << "[5] Generate Daily Statement" << endl;
+    cout << "[6] Credits and Exit" << endl;
+    cout << "********************************" << endl;
+    cout << "Option (1 - 6):";
 
 }
+void R1(vector <MAR>& MAR) {
+    cout << "Loading Starting Data..." << endl;
+    this_thread::sleep_for(chrono::seconds(2));
+    cout << "Starting Data Loaded Successfully!" << endl;
+    this_thread::sleep_for(chrono::seconds(2));
+    R0();
+}
+void R2(vector <MAR> MAR) {
 
-void R1(vector <MAR> MAR){
-    
     cout << left << setw(20) << "Member";
     cout << left << setw(10) << "Member";
     cout << left << setw(20) << "Passport";
     cout << left << setw(10) << "MRZ";
     cout << left << setw(20) << "Member";
-    cout << left << setw(10) << "Mileage Points"<<endl;
+    cout << left << setw(10) << "Mileage Points" << endl;
     cout << left << setw(20) << "Number";
     cout << left << setw(10) << "Tier";
     cout << left << setw(20) << "Number";
     cout << left << setw(10) << "  ";
     cout << left << setw(20) << "Name";
-    cout << left << setw(10) << "Balance"<<endl;
+    cout << left << setw(10) << "Balance" << endl;
     cout << "----------------------------------------------------------------------------------------------" << endl;
-    
+
     for (const auto& Table : MAR) {
         cout << left << setw(20) << Table.MemNum;
         cout << left << setw(10) << Table.MemTier;
@@ -84,42 +91,42 @@ void R1(vector <MAR> MAR){
 
 
 
-void R4(vector <MAR> MAR){
+void R4(vector <MAR> MAR) {
 
     int acc = 0;
 
-    cout<<"Enter Member Number: ";
+    cout << "Enter Member Number: ";
 
-    cin>>acc;
+    cin >> acc;
 
     bool Found = false;
 
     for (const auto& Table : MAR) {
-        if (Table.MemNum == acc){
+        if (Table.MemNum == acc) {
             Found = true;
             break;
         }
     }
 
-    if(!Found){
+    if (!Found) {
 
-        cout<<"such Member Number does not exist"<<endl;
+        cout << "such Member Number does not exist" << endl;
         this_thread::sleep_for(chrono::seconds(2));
-        cout<<"returns to the Main Menu"<<endl;
+        cout << "returns to the Main Menu" << endl;
         this_thread::sleep_for(chrono::seconds(2));
         R0();
 
     }
 
-    cout<<"Action for Member Number: "<<acc<<endl;
-    cout<<"***** Member Account Operations Menu ***********************" <<endl;
-    cout<<"[1] Edit Member Information"<<endl;
-    cout<<"[2] Update Mileage Points Balance according to Flight Records"<<endl;
-    cout<<"[3] Create Flight Records"<<endl;
-    cout<<"[4] Redeem Mileage Points for a Gift & Transfer"<<endl;
-    cout<<"[5] Return to Main Menu"<<endl;
-    cout<<"***********************************************************"<<endl;
-    cout<<"Option (1 - 5):";
+    cout << "Action for Member Number: " << acc << endl;
+    cout << "***** Member Account Operations Menu ***********************" << endl;
+    cout << "[1] Edit Member Information" << endl;
+    cout << "[2] Update Mileage Points Balance according to Flight Records" << endl;
+    cout << "[3] Create Flight Records" << endl;
+    cout << "[4] Redeem Mileage Points for a Gift & Transfer" << endl;
+    cout << "[5] Return to Main Menu" << endl;
+    cout << "***********************************************************" << endl;
+    cout << "Option (1 - 5):";
 
 }
 //R5: Generate Daily Statement
@@ -215,7 +222,7 @@ void R6() {
         cout << "Exit cancelled. Returning to Main Menu." << endl;
         return;
     }
-	// Display group member particulars, changing the details below to your actual group member particulars
+    // Display group member particulars, changing the details below to your actual group member particulars
     cout << "================================================================" << endl;
     cout << "                         Credits                                " << endl;
     cout << "================================================================" << endl;
@@ -233,7 +240,7 @@ void R6() {
     exit(0);
 }
 
-int main(){
+int main() {
 
     //R0
 
@@ -247,31 +254,34 @@ int main(){
         {202067856, "Silver", "E38876890",1,"CHAN Peter",53200},
         {202211843, "Gold", "E38900078",7,"CHEUNG Alice",30000}
     };
+    do {
+        R0();
 
-    R0();
+        cin >> Selection;
 
-    cin>>Selection;
-
-    switch(Selection){
+        switch (Selection) {
         case 1:
-        R1(MAR);
-        break;
+            R1(MAR);
+            break;
         case 2:
-        break;
+            R2(MAR);
+            break;
         case 3:
-        break;
+            break;
         case 4:
-        R4(MAR);
-        break;
+            R4(MAR);
+            break;
         case 5:
-		R5(MAR);
-        break;
+            R5(MAR);
+            break;
         case 6:
-        R6();
-        break;
+            R6();
+            break;
         default:
-        cout<<"No Such Selection";
-    }
+            cout << "No Such Selection";
+            break;
+        }
+    } while (Selection != 'q');
 
     //R1
 
