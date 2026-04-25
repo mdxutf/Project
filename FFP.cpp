@@ -55,15 +55,26 @@ void R0() {
     cout << "Option (1 - 6):";
 
 }
-void R1(vector <MAR>& MAR) {
-    cout << "Loading Starting Data..." << endl;
-    this_thread::sleep_for(chrono::seconds(2));
-    cout << "Starting Data Loaded Successfully!" << endl;
-    this_thread::sleep_for(chrono::seconds(2));
-    R0();
-}
-void R2(vector <MAR> MAR) {
 
+void R1(vector <MAR>& MAR) {
+    gMember = {
+        {202456734, "Gold", "A56677890", 4, "WONG Claire", 45000},
+        {202333890, "Green", "C78678908", 5, "MA Kathy", 10000},
+        {202067856, "Silver", "E38876890", 1, "CHAN Peter", 53200},
+        {202211843, "Gold", "E38900078", 7, "CHEUNG Alice", 30000}
+    };
+    gFlights = {
+    {202211843, "Hong Kong", "London", "CC81", "First", "28-05-2025", "01-05-2025", 0},
+    {202211843, "London", "Hong Kong", "CC82", "First", "10-06-2025", "01-05-2025", 0},
+    {202333890, "London", "Dubai", "CC61", "Economy", "12-06-2025", "10-06-2025", 0},
+    {202067856, "Hong Kong", "Dubai", "CC31", "Business", "05-07-2025", "20-06-2025", 0},
+    {202067856, "Dubai", "London", "CC62", "Business", "08-07-2025", "20-06-2025", 0},
+    {202456734, "Dubai", "Hong Kong", "CC32", "Business", "05-08-2025", "02-08-2025", 0}
+    };
+}
+
+void R2(vector <MAR> MAR) {
+    cout << endl;
     cout << left << setw(20) << "Member";
     cout << left << setw(10) << "Member";
     cout << left << setw(20) << "Passport";
@@ -78,13 +89,38 @@ void R2(vector <MAR> MAR) {
     cout << left << setw(10) << "Balance" << endl;
     cout << "----------------------------------------------------------------------------------------------" << endl;
 
-    for (const auto& Table : MAR) {
+    for (const auto& Table : gMember) {
         cout << left << setw(20) << Table.MemNum;
         cout << left << setw(10) << Table.MemTier;
         cout << left << setw(20) << Table.PassNum;
         cout << left << setw(10) << Table.MRZ;
         cout << left << setw(20) << Table.MemName;
         cout << left << setw(10) << Table.MPB << endl;
+    }
+    cout << endl;
+    cout << left << setw(20) << "Member";
+    cout << left << setw(10) << "Origin";
+    cout << left << setw(20) << "Destination";
+    cout << left << setw(10) << "Flight";
+    cout << left << setw(10) << "Cabin";
+    cout << left << setw(20) << "Departure";
+    cout << left << setw(20) << "Creation";
+    cout << left << setw(10) << "Updated" << endl;
+    cout << left << setw(50) << "Number";
+    cout << left << setw(10) << "Number";
+    cout << left << setw(10) << "Class";
+    cout << left << setw(20) << "Date";
+    cout << left << setw(10) << "Date" << endl;
+    cout << "----------------------------------------------------------------------------------------------" << endl;
+    for (const auto& Table : gFlights) {
+        cout << left << setw(20) << Table.MemNum;
+        cout << left << setw(10) << Table.Origin;
+        cout << left << setw(20) << Table.Destination;
+        cout << left << setw(10) << Table.FlightNum;
+        cout << left << setw(10) << Table.CabinClass;
+        cout << left << setw(20) << Table.DepartureDate;
+        cout << left << setw(20) << Table.CreationDate;
+        cout << left << setw(10) << Table.Updated << endl;
     }
 
 }
