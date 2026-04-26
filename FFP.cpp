@@ -72,20 +72,20 @@ int calculateMRZ(const string& passport) {
 }
 
 bool checkFormat(const string& dateStr) {
-    if (dateStr.length() != 10){
+    if (dateStr.length() != 10) {
 
         return false;
 
     }
     regex pattern("\\d{2}-\\d{2}-\\d{4}");
-    int LastD[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
-    int month = stoi(dateStr.substr(4, 5));
-    int day = stoi(dateStr.substr(1, 2));
+    int LastD[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+    int month = stoi(dateStr.substr(3, 2));
+    int day = stoi(dateStr.substr(0, 2));
     int year = stoi(dateStr.substr(6, 10));
-    if (month >12||month<1||year!=2025){
+    if (month > 12 || month < 1 || year != 2025) {
         return false;
     }
-    else if(regex_match(dateStr, pattern)&&day<=LastD[month-1]&&day>=1){
+    else if (regex_match(dateStr, pattern) && day <= LastD[month - 1] && day >= 1) {
         return true;
     }
 
