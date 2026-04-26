@@ -4,6 +4,9 @@
 #include <vector>
 #include <thread>
 #include <chrono>
+#include <cstdlib>   
+#include <ctime>     
+#include <cctype>
 
 using namespace std;
 
@@ -40,6 +43,26 @@ vector<MAR> gMember;
 vector<FLR> gFlights;
 vector<TXN> gTransactions;
 string gSystemDate = "";
+
+int calculateMRZ(const string& passport) {
+    if (passport.length() != 9) return 0;
+    if (!isupper(passport[0])) return 0;
+
+    int weights[9] = {7, 3, 1, 7, 3, 1, 7, 3, 1};
+    int sum = 0;
+    for (int i = 0; i < 9; ++i) {
+        char c = passport[i];
+        int val;
+        if (i == 0) {
+            val = 10 + (c - 'A');
+        } else {
+            if (!isdigit(c)) return 0;
+            val = c - '0';
+        }
+        sum += val * weights[i];
+    }
+    return sum % 10;
+}
 
 void R0() {
 
@@ -125,7 +148,129 @@ void R2(vector <MAR> MAR) {
 
 }
 
+void R3() {
+    if (gMember.empty()) {
+        cout << "Starting data not loaded yet! Please use option [1] first." << endl;
+        this_thread::sleep_for(chrono::seconds(2));
+        return;
+    }
 
+    int acc = 0;
+    cout << "Enter Member Number: ";
+    cin >> acc;
+    cin.ignore();
+
+    bool exists = false;
+    size_t idx = 0;
+    for (size_t i = 0; i < gMember.size(); ++i) {
+        if (gMember[i].MemNum == acc) {
+            exists = true;
+            idx = i;
+            break;
+        }
+    }
+
+    if (exists) {
+        // Close account
+        const MAR& m = gMember[idx];
+        cout << endl << "Member Information:" << endl;
+        cout << left << setw(20) << "Member Number" << ": " << m.MemNum << endl;
+        cout << left << setw(20) << "Member Tier" << ": " << m.MemTier << endl;
+        cout << left << setw(20) << "Passport Number" << ": " << m.PassNum << endl;
+        cout << left << setw(20) << "MRZ" << ": " << m.MRZ << endl;
+        cout << left << setw(20) << "Member Name" << ": " << m.MemName << endl;
+        cout << left << setw(20) << "Mileage Points Balance" << ": " << m.MPB << endl << endl;
+
+        char confirm;
+        cout << "Confirm to close this account? (Y/N): ";
+        cin >> confirm;
+        if (toupper(confirm) == 'Y') {
+            int closedNum = gMember[idx].MemNum;
+            gMember.erase(gMember.begin() + idx);
+            for (int i = static_cast<int>(gFlights.size()) - 1; i >= 0; --i) {
+                if (gFlights[i].MemNum == closedNum) {
+                    gFlights.erase(gFlights.begin() + i);
+                }
+            }
+            cout << "Member account and related flight records closed successfully." << endl;
+        } else {
+            cout << "Close operation cancelled." << endl;
+        }
+    } else {
+        // Open new account 
+        cout << endl << "--- Open New Member Account ---" << endl;
+        bool opened = false;
+        for (int attempt = 0; attempt < 3; ++attempt) {
+            string name, passport, tier;
+
+            cout << "Attempt " << (attempt + 1) << "/3" << endl;
+            cout << "Enter Member Name: ";
+            getline(cin, name);
+
+            cout << "Enter Passport Number (e.g. A12345678): ";
+            cin >> passport;
+
+            cout << "Enter Member Tier (Green/Silver/Gold/Diamond): ";
+            cin >> tier;
+            cin.ignore();
+
+            // Validate passport
+            bool validPassport = (passport.length() == 9 && isupper(passport[0]));
+            if (validPassport) {
+                for (size_t j = 1; j < 9; ++j) {
+                    if (!isdigit(passport[j])) {
+                        validPassport = false;
+                        break;
+                    }
+                }
+            }
+            if (validPassport) {
+                for (const auto& m : gMember) {
+                    if (m.PassNum == passport) {
+                        validPassport = false;
+                        break;
+                    }
+                }
+            }
+
+            bool validTier = (tier == "Green" || tier == "Silver" || tier == "Gold" || tier == "Diamond");
+
+            if (validPassport && validTier && !name.empty()) {
+                int mrz = calculateMRZ(passport);
+
+                string yearStr = "2025";
+                if (!gSystemDate.empty() && gSystemDate.length() >= 10) {
+                    yearStr = gSystemDate.substr(6, 4);
+                }
+                int year = stoi(yearStr);
+                int rand5 = 10000 + (rand() % 90000);
+                int newMemNum = year * 100000 + rand5;
+
+                MAR newMember;
+                newMember.MemNum = newMemNum;
+                newMember.MemTier = tier;
+                newMember.PassNum = passport;
+                newMember.MRZ = mrz;
+                newMember.MemName = name;
+                newMember.MPB = 0;
+                gMember.push_back(newMember);
+
+                cout << "\nNew member account opened successfully!" << endl;
+                cout << "Generated Member Number: " << newMemNum << endl;
+                cout << "MRZ: " << mrz << endl;
+                opened = true;
+                break;
+            } else {
+                cout << "Invalid input. " << (2 - attempt) << " attempt(s) left." << endl;
+            }
+        }
+        if (!opened) {
+            cout << "Failed to open new member account after 3 attempts." << endl;
+        }
+    }
+    cout << "\nOperation completed. Returning to Main Menu." << endl;
+    this_thread::sleep_for(chrono::seconds(2));
+}
 
 void R4(vector <MAR> MAR) {
 
@@ -302,7 +447,8 @@ int main() {
         case 2:
             R2(MAR);
             break;
-        case 3:
+       case 3:
+            R3();
             break;
         case 4:
             R4(MAR);
@@ -324,7 +470,7 @@ int main() {
     //R2
 
     //R3
-
+    srand(static_cast<unsigned>(time(NULL)));
     //R4
 
     return 0;
