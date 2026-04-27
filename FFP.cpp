@@ -72,20 +72,20 @@ int calculateMRZ(const string& passport) {
 }
 
 bool checkFormat(const string& dateStr) {
-    if (dateStr.length() != 10) {
+    if (dateStr.length() != 10){
 
         return false;
 
     }
     regex pattern("\\d{2}-\\d{2}-\\d{4}");
-    int LastD[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+    int LastD[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
     int month = stoi(dateStr.substr(3, 2));
     int day = stoi(dateStr.substr(0, 2));
     int year = stoi(dateStr.substr(6, 10));
-    if (month > 12 || month < 1 || year != 2025) {
+    if (month >12||month<1||year!=2025){
         return false;
     }
-    else if (regex_match(dateStr, pattern) && day <= LastD[month - 1] && day >= 1) {
+    else if(regex_match(dateStr, pattern)&&day<=LastD[month-1]&&day>=1){
         return true;
     }
 
@@ -94,6 +94,69 @@ bool checkFormat(const string& dateStr) {
 
 void delay(int sec){
     this_thread::sleep_for(chrono::seconds(sec));
+}
+
+void OutputCol(int mode){
+
+    if(mode == 1){
+        cout << endl;
+        cout << left << setw(20) << "Member";
+        cout << left << setw(10) << "Member";
+        cout << left << setw(20) << "Passport";
+        cout << left << setw(10) << "MRZ";
+        cout << left << setw(20) << "Member";
+        cout << left << setw(10) << "Mileage Points" << endl;
+        cout << left << setw(20) << "Number";
+        cout << left << setw(10) << "Tier";
+        cout << left << setw(20) << "Number";
+        cout << left << setw(10) << "  ";
+        cout << left << setw(20) << "Name";
+        cout << left << setw(10) << "Balance" << endl;
+        cout << "----------------------------------------------------------------------------------------------" << endl;
+    }else if(mode == 2){
+
+        cout << left << setw(20) << "Member";
+        cout << left << setw(10) << "Origin";
+        cout << left << setw(20) << "Destination";
+        cout << left << setw(10) << "Flight";
+        cout << left << setw(10) << "Cabin";
+        cout << left << setw(20) << "Departure";
+        cout << left << setw(20) << "Creation";
+        cout << left << setw(10) << "Updated" << endl;
+        cout << left << setw(50) << "Number";
+        cout << left << setw(10) << "Number";
+        cout << left << setw(10) << "Class";
+        cout << left << setw(20) << "Date";
+        cout << left << setw(10) << "Date" << endl;
+        cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
+
+    }else if(mode == 3){
+        cout << left << setw(20) << "Member";
+        cout << left << setw(10) << "Flight";
+        cout << left << setw(10) << "Cabin";
+        cout << left << setw(20) << "Departure";
+        cout << left << setw(10) << "Updated" << endl;
+        cout << left << setw(20) << "Number";
+        cout << left << setw(10) << "Number";
+        cout << left << setw(10) << "Class";
+        cout << left << setw(10) << "Date" << endl;
+        cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
+    }
+
+}
+
+void MAOM(const int acc){
+
+    cout << "Action for Member Number: " << acc << endl;
+    cout << "***** Member Account Operations Menu ***********************" << endl;
+    cout << "[1] Edit Member Information" << endl;
+    cout << "[2] Update Mileage Points Balance according to Flight Records" << endl;
+    cout << "[3] Create Flight Records" << endl;
+    cout << "[4] Redeem Mileage Points for a Gift & Transfer" << endl;
+    cout << "[5] Return to Main Menu" << endl;
+    cout << "***********************************************************" << endl;
+    cout << "Option (1 - 5):";
+
 }
 
 //R0 - R5
@@ -113,7 +176,7 @@ void R0() {
 
 }
 
-int R1(vector <MAR>& MAR){
+int R1(vector <MAR>& MAR,string&date){
 
     gMember = {
         {202456734, "Gold", "A56677890", 4, "WONG Claire", 45000},
@@ -154,6 +217,7 @@ int R1(vector <MAR>& MAR){
                delay(1);
                cout << "returns to the Main Menu" << endl;
                delay(1);
+               date = SetDate;
                return 0;
             }else{
 
@@ -171,29 +235,17 @@ int R1(vector <MAR>& MAR){
 
     cout<<"Since you have entered THREE consecutive invalid inputs"<<endl;
     delay(1);
-    cout<<"the system should set a default date of 30-06-2025"<<endl;
+    cout<<"the system should set a default date of “30-06-2025”"<<endl;
     delay(1);
     cout << "returns to the Main Menu" << endl;
+    date = "30-06-2025";
     return 0;
 
 }
 
 
 void R2() {
-    cout << endl;
-    cout << left << setw(20) << "Member";
-    cout << left << setw(10) << "Member";
-    cout << left << setw(20) << "Passport";
-    cout << left << setw(10) << "MRZ";
-    cout << left << setw(20) << "Member";
-    cout << left << setw(10) << "Mileage Points" << endl;
-    cout << left << setw(20) << "Number";
-    cout << left << setw(10) << "Tier";
-    cout << left << setw(20) << "Number";
-    cout << left << setw(10) << "  ";
-    cout << left << setw(20) << "Name";
-    cout << left << setw(10) << "Balance" << endl;
-    cout << "----------------------------------------------------------------------------------------------" << endl;
+    OutputCol(1);
 
     for (const auto& Table : gMember) {
         cout << left << setw(20) << Table.MemNum;
@@ -204,20 +256,7 @@ void R2() {
         cout << left << setw(10) << Table.MPB << endl;
     }
     cout << endl;
-    cout << left << setw(20) << "Member";
-    cout << left << setw(10) << "Origin";
-    cout << left << setw(20) << "Destination";
-    cout << left << setw(10) << "Flight";
-    cout << left << setw(10) << "Cabin";
-    cout << left << setw(20) << "Departure";
-    cout << left << setw(20) << "Creation";
-    cout << left << setw(10) << "Updated" << endl;
-    cout << left << setw(50) << "Number";
-    cout << left << setw(10) << "Number";
-    cout << left << setw(10) << "Class";
-    cout << left << setw(20) << "Date";
-    cout << left << setw(10) << "Date" << endl;
-    cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
+    OutputCol(2);
     for (const auto& Table : gFlights) {
         cout << left << setw(20) << Table.MemNum;
         cout << left << setw(10) << Table.Origin;
@@ -232,13 +271,16 @@ void R2() {
 }
 
 void R3() {
+    if (gMember.empty()) {
+        cout << "Starting data not loaded yet! Please use option [1] first." << endl;
+        this_thread::sleep_for(chrono::seconds(2));
+        return;
+    }
+
     int acc = 0;
     cout << "Enter Member Number: ";
-    while (!(cin >> acc)) {
-        cout << "Invalid input! Please enter a valid Member Number (digits only): ";
-        cin.clear();                    
-        cin.ignore(10000, '\n');        
-    }
+    cin >> acc;
+    cin.ignore();
 
     bool exists = false;
     size_t idx = 0;
@@ -352,58 +394,343 @@ void R3() {
     this_thread::sleep_for(chrono::seconds(2));
 }
 
-void R4(vector <MAR> MAR) {
+int R4(vector <MAR> MAR,const string Setdate) {
 
     int acc = 0;
+
+    int index = -1;
+
+    vector<int> index2;
 
     cout << "Enter Member Number: ";
 
     cin >> acc;
-
-    bool Found = false;
     
     for (size_t i = 0; i < gMember.size(); ++i) {
+        index = i;
         if (gMember[i].MemNum == acc) {
-            Found = true;
             break;
         }
     }
 
-    if (Found) {
+    for (size_t i = 0; i < gFlights.size(); ++i) {
+        if (gFlights[i].MemNum == acc) {
+            index2.push_back(i);
+        }
+    }
+
+    if (index == -1) {
 
         cout << "such Member Number does not exist" << endl;
         this_thread::sleep_for(chrono::seconds(2));
         cout << "returns to the Main Menu" << endl;
         this_thread::sleep_for(chrono::seconds(2));
+        return 0;
 
     }
     else{
-        cout << "Action for Member Number: " << acc << endl;
-        cout << "***** Member Account Operations Menu ***********************" << endl;
-        cout << "[1] Edit Member Information" << endl;
-        cout << "[2] Update Mileage Points Balance according to Flight Records" << endl;
-        cout << "[3] Create Flight Records" << endl;
-        cout << "[4] Redeem Mileage Points for a Gift & Transfer" << endl;
-        cout << "[5] Return to Main Menu" << endl;
-        cout << "***********************************************************" << endl;
-        cout << "Option (1 - 5):";
+        MAOM(acc);
     }
     
     int Sel = 0;
     cin>>Sel;
-    if((Sel>0)&&(Sel<6)){
-        
-        
-        
-        char confirm;
-        cout << "Confirm to edit this account? (Y/N): ";
-        cin >> confirm;
-        
-        if(toupper(confirm) == 'Y'){
+    string MM;
+    string PM;
+    string MT;
+    int Setday = stoi(Setdate.substr(0, 2));
+    int SetMonth = stoi(Setdate.substr(3, 2));
+    int OD[9][3] = {{0},{2000,4000,8000},{4000,8000,16000},{2000,4000,8000},{0},{2000,4000,8000},{4000,8000,16000},{2000,4000,8000},{0}};
+    string Dest[9] = {"","CC31","CC81","CC32","","CC62","CC82","CC61",""};
+    string CClass[3] = {"Economy","Business","First"};
+    string tier[4] = {"Green","Silver","Gold","Diamond"};
+    string Places[3] = {"Hong Kong","Dubai","London"};
+    string Prizes[3] = {"Movie voucher","supermarket voucher","Airport lounge access voucher"};
+    int MPR[3] = {3000,4000,6000};
+    int price = 0;
+    int TierN = -1;
+    string FN, CC, DD;
+    int month2 = stoi(DD.substr(3, 2));
+    int day2 = stoi(DD.substr(0, 2));
+    switch(Sel){
+        case 1:
+
+        cout<<"Current member information"<<endl;
+
+            OutputCol(1);
+
+            cout << left << setw(20) << gMember[index].MemNum;
+            cout << left << setw(10) << gMember[index].MemTier;
+            cout << left << setw(20) << gMember[index].PassNum;
+            cout << left << setw(10) << gMember[index].MRZ;
+            cout << left << setw(20) << gMember[index].MemName;
+            cout << left << setw(10) << gMember[index].MPB << endl;
+
+            while(MM.length()>30||MM.length()<1){
+
+                cout<<"Please Enter a name that consists of surname and given name(at most 30 characters)"<<endl;
+                cout<<"Edit member name(Type ~ to skip):";
+                getline(cin,MM);
+                cin.ignore();
+                if(MM=="~"){
+                    break;
+                }
+            }
+            while(PM.length()!=9||!isalpha(static_cast<unsigned char>(PM[0]))){
+
+                cout<<"Please Input with this format (e.g. A12345678)";
+                cout<<"passport number(Type ~ to skip)";
+
+                cin>>PM;
+                if(PM=="~"){
+                    break;
+                }
+                PM[0] = toupper(PM[0]);
+
+            }
+            while(!(MT == "Green" || MT == "Silver" || MT == "Gold" || MT == "Diamond")){
+
+                cout << "Enter Member Tier (Green/Silver/Gold/Diamond):";
+                cin >> MT;
+                cin.ignore();
+                if(MT=="~"){
+                    break;
+                }
+                
+            }
+
+            char confirm;
+            cout << "Confirm to edit this account? (Y/N): ";
+            cin >> confirm;
+
+            if(toupper(confirm) == 'Y'){
+
+                gMember[index].MemTier = MT;
+                gMember[index].MemName = MM;
+                gMember[index].PassNum = PM;
+                gMember[index].MRZ = calculateMRZ(PM);
+
+            }
             
-        }
-        
+            break;
+        case 2:
+
+            OutputCol(3);
+
+            for (const auto& Table : gFlights) {
+                int month = stoi(Table.DepartureDate.substr(3, 2));
+                int day = stoi(Table.DepartureDate.substr(0, 2)); 
+                if((Setday<day&&SetMonth == month)||(SetMonth < month)){
+                    continue;
+                }
+                cout << left << setw(20) << Table.MemNum;
+                cout << left << setw(10) << Table.FlightNum;
+                cout << left << setw(10) << Table.CabinClass;
+                cout << left << setw(20) << Table.DepartureDate;
+                cout << left << setw(10) << Table.Updated << endl;
+            }
+
+            for(int i = 0;i<4;i++){
+                TierN = i;
+                if(tier[i] == gMember[index].MemTier){
+
+                    break;
+
+                }
+            }
+
+            gMember[index].MPB = 0;
+
+            for(int k = 0;k<index2.size();k++){
+
+                for(int i = 0;i<9;i++){
+                    if(gFlights[index2[k]].FlightNum == Dest[i]){
+                        for(int j = 0;j<=2;j++){
+                            if(CClass[j] == gFlights[index2[k]].CabinClass){
+                                price = OD[i][j]+(OD[i][j]*TierN*2/100);
+                            }
+                        }
+                    }
+                }
+
+                gFlights[index2[k]].Updated = 1;
+                gMember[index].MPB+=price;
+                price = 0;
+
+            }
+
+            cout<<"updated information"<<endl<<endl;
+
+            OutputCol(3);
+
+            for (const auto& Table : gFlights) {
+                int month = stoi(Table.DepartureDate.substr(3, 2));
+                int day = stoi(Table.DepartureDate.substr(0, 2)); 
+                if((Setday<day&&SetMonth == month)||(SetMonth < month)){
+                    continue;
+                }
+                cout << left << setw(20) << Table.MemNum;
+                cout << left << setw(10) << Table.FlightNum;
+                cout << left << setw(10) << Table.CabinClass;
+                cout << left << setw(20) << Table.DepartureDate;
+                cout << left << setw(10) << Table.Updated << endl;
+            }
+
+            cout << "returns to the  Member Account Operations Menu" << endl;
+            this_thread::sleep_for(chrono::seconds(2));
+            
+            break;
+        case 3:
+
+            while((FN.length()!=4)||(!isalpha(static_cast<unsigned char>(FN[0])))){
+
+                cout << "Enter Flight Number(e.g C811): ";
+                cin>>FN;
+
+                FN[0] = toupper(FN[0]);
+
+            }
+
+            while(!(CC == CClass[0] || CC == CClass[1] || CC == CClass[2])){
+
+                cout << "Enter Cabin Class (Economy/Business/First): ";
+                cin >> CC;
+
+            }
+
+            while((Setday<day2&&SetMonth == month2)||(SetMonth < month2)){
+
+                cout<<"Please Enter the Date after"<<Setdate<<endl;
+
+                cout << "Enter Departure Date (DD-MM-YY): ";
+                cin >> DD;
+
+            }
+
+            char confirm2;
+            cout << "Confirm to create this record? (Y/N): ";
+            cin >> confirm2;
+
+            if(toupper(confirm2) == 'Y'){
+
+                string Origin;
+
+                string Destination;
+
+                for(int i = 0;i<9;i++){
+
+                    if(Dest[i] == FN){
+
+                        if(i<3){
+
+                            Origin = Places[0];
+
+                            Destination = Places[i];
+
+                        }else if(i<6){
+
+                            Origin = Places[1];
+
+                            Destination = Places[i-3];
+
+                        }else if(i<9){
+
+                            Origin = Places[1];
+
+                            Destination = Places[i-6];
+
+                        }
+                        
+                        break;
+
+                    }
+
+                }
+
+                gFlights.push_back({acc,Origin,Destination,FN,CC,DD,Setdate,0});
+
+            }
+
+            break;
+        case 4:
+
+            int mode = 1;
+
+            while(mode >2||mode<=0){
+                cout<<"Redeem Mileage Points for a Gift(1)"<<endl;
+                cout<<"Transfer(2)"<<endl;
+                cout<<"Choose the option(1-2)";
+                cin>>mode;
+            }
+
+            int choice = 0;
+
+            if(mode == 1){
+                cout << left << setw(20) << "Gift Number";
+                cout << left << setw(50) << "Description";
+                cout << left << setw(20) << "Mileage Points Required ";
+                for(int i = 0;i<=2;i++){
+                    cout << left << setw(20) << i+1;
+                    cout << left << setw(20) << Prizes[i];
+                    cout << left << setw(20) << MPR[i]<<endl;
+                }
+
+                cout<<"choose the gift to redeem(1-3)(Enter q to quit):";
+
+                cin>>choice;
+
+                gMember[index].MPB -= MPR[choice];
+
+                cout<<"Redeemed";
+
+            }else if(mode == 2){
+                int acc = 0,mpt = 0;
+                string MName;
+
+                cout<<"Enter the member account that you want to transfer: ";
+                cin>>acc;
+
+                cout<<"mileage point to be transfer: ";
+                cin>>mpt;
+                cout<<"the target member account's member name is ";
+
+                int index3 = -1;
+
+                for (size_t i = 0; i < gMember.size(); ++i) {
+                    index3 = i;
+                    if (gMember[i].MemNum == acc) {
+                        MName = gMember[i].MemName;
+                        break;
+                    }
+                }
+
+                cout<<MName<<endl;
+
+                char confirm3;
+                cout << "Confirm to transfer this account? (Y/N): ";
+                cin >> confirm3;
+
+                if(toupper(confirm3) == 'Y'){
+
+                    gMember[index3].MPB+=mpt;
+                    gMember[index].MPB-=mpt;
+
+                    cout<<"Tranfer finished";
+
+                }
+
+            }
+            
+            break;
+        case 5:
+
+            
+            break;
+        default:
+            cout << "No Such Selection";
+            break;
     }
+
+    return 0;
 
 }
 //R5: Generate Daily Statement
@@ -527,6 +854,8 @@ int main() {
 
     bool lock = true;
 
+    string date;
+
     vector<MAR> MAR = { //MAR Member Account Records
         {202456734, "Gold", "A56677890",4,"WONG Claire",45000},
         {202333890, "Green", "C78678908",5,"MA Kathy",10000},
@@ -555,7 +884,7 @@ int main() {
 
         switch (Selection) {
         case 1:
-            R1(MAR);
+            R1(MAR,date);
             lock = false;
             break;
         case 2:
@@ -565,7 +894,7 @@ int main() {
             R3();
             break;
         case 4:
-            R4(MAR);
+            R4(MAR,date);
             break;
         case 5:
             R5(MAR);
@@ -577,8 +906,8 @@ int main() {
             cout << "No Such Selection";
             break;
         }
-    } while (Selection != 7);
-    cout << "Program terminates. Good bye!" << endl;
+    } while (Selection != 'q');
+    
     srand(static_cast<unsigned>(time(NULL)));
 
     return 0;
