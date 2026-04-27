@@ -171,7 +171,7 @@ int R1(vector <MAR>& MAR){
 
     cout<<"Since you have entered THREE consecutive invalid inputs"<<endl;
     delay(1);
-    cout<<"the system should set a default date of “30-06-2025”"<<endl;
+    cout<<"the system should set a default date of 30-06-2025"<<endl;
     delay(1);
     cout << "returns to the Main Menu" << endl;
     return 0;
