@@ -232,12 +232,6 @@ void R2() {
 }
 
 void R3() {
-    if (gMember.empty()) {
-        cout << "Starting data not loaded yet! Please use option [1] first." << endl;
-        this_thread::sleep_for(chrono::seconds(2));
-        return;
-    }
-
     int acc = 0;
     cout << "Enter Member Number: ";
     cin >> acc;
