@@ -514,7 +514,7 @@ void R6() {
     cout << left << setw(25) << "Member Name 2" << setw(15) << "12345672" << setw(10) << "TUT01" << endl;
     cout << left << setw(25) << "Member Name 3" << setw(15) << "12345673" << setw(10) << "TUT01" << endl;
     cout << left << setw(25) << "Member Name 4" << setw(15) << "12345674" << setw(10) << "TUT01" << endl;
-    cout << left << setw(25) << "Member Name 5" << setw(15) << "12345675" << setw(10) << "TUT01" << endl;
+    cout << left << setw(25) << "Hui Ho Chun Oscar" << setw(15) << "24048710A" << setw(10) << "B06" << endl;
     cout << "================================================================" << endl;
 
     exit(0);
