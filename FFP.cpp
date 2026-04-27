@@ -580,8 +580,8 @@ int main() {
             cout << "No Such Selection";
             break;
         }
-    } while (Selection != 'q');
-    
+    } while (Selection != 7);
+    cout << "Program terminates. Good bye!" << endl;
     srand(static_cast<unsigned>(time(NULL)));
 
     return 0;
