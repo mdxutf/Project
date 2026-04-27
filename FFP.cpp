@@ -234,8 +234,11 @@ void R2() {
 void R3() {
     int acc = 0;
     cout << "Enter Member Number: ";
-    cin >> acc;
-    cin.ignore();
+    while (!(cin >> acc)) {
+        cout << "Invalid input! Please enter a valid Member Number (digits only): ";
+        cin.clear();                    
+        cin.ignore(10000, '\n');        
+    }
 
     bool exists = false;
     size_t idx = 0;
