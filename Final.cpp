@@ -917,7 +917,7 @@ void R6() {
         << setw(10) << "Tutorial" << endl;
     cout << "----------------------------------------------------------------" << endl;
     cout << left << setw(25) << "Tsang King Lok Martin" << setw(15) << "25192661A" << setw(10) << "B06" << endl;
-    cout << left << setw(25) << "Member Name 2" << setw(15) << "12345672" << setw(10) << "B06" << endl;
+    cout << left << setw(25) << "WONG Cheung Hei" << setw(15) << "25192095A" << setw(10) << "B06" << endl;
     cout << left << setw(25) << "Member Name 3" << setw(15) << "12345673" << setw(10) << "B06" << endl;
     cout << left << setw(25) << "Kong Tsz Wun" << setw(15) << "25172047A" << setw(10) << "B06" << endl;
     cout << left << setw(25) << "Hui Ho Chun Oscar" << setw(15) << "24048710A" << setw(10) << "B06" << endl;
