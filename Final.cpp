@@ -783,7 +783,6 @@ int R4(const string Setdate) {
             
         cout << endl << "Returning to Main Menu..." << endl;
         delay(2);
-        R4(Setdate);
         break;
     }
 
