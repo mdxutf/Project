@@ -722,6 +722,35 @@ int R4(vector <MAR> MAR,const string Setdate) {
             
             break;
         case 5:
+            // R4.5 - Display Latest Member Information
+            cout << endl << "----------------------------------------------------------------" << endl;
+            cout << "Latest Member Account Information:" << endl;
+            cout << "----------------------------------------------------------------" << endl;
+            cout << left << setw(25) << "Member Number"   << ": " << gMember[index].MemNum  << endl;
+            cout << left << setw(25) << "Member Name"     << ": " << gMember[index].MemName << endl;
+            cout << left << setw(25) << "Member Tier"     << ": " << gMember[index].MemTier << endl;
+            cout << left << setw(25) << "Passport Number" << ": " << gMember[index].PassNum << endl;
+            cout << left << setw(25) << "MRZ"             << ": " << gMember[index].MRZ     << endl;
+            cout << left << setw(25) << "Mileage Points"  << ": " << gMember[index].MPB     << endl;
+            cout << "----------------------------------------------------------------" << endl << endl;
+
+            // R4.5 - Display not-yet-updated flight records
+            cout << "--- Pending Flight Records (Mileage Points Not Yet Updated) ---" << endl;
+            OutputCol(3);
+            
+            for (size_t i = 0; i < gFlights.size(); i++) {
+                if (gFlights[i].MemNum == acc && gFlights[i].Updated == 0) {
+                    cout << left << setw(20) << gFlights[i].MemNum;
+                    cout << left << setw(10) << gFlights[i].FlightNum;
+                    cout << left << setw(10) << gFlights[i].CabinClass;
+                    cout << left << setw(20) << gFlights[i].DepartureDate;
+                    cout << left << setw(10) << gFlights[i].Updated << endl;
+                }
+            }
+            
+            cout << endl << "Returning to Main Menu..." << endl;
+            delay(2);
+            break;
 
             
             break;
@@ -733,8 +762,9 @@ int R4(vector <MAR> MAR,const string Setdate) {
     return 0;
 
 }
+
 //R5: Generate Daily Statement
-void R5(vector<MAR> MAR) {
+void R5(vector<MAR> MAR, string sysDate) {
 
     int acc = 0;
     cout << "Enter Member Number: ";
@@ -758,7 +788,7 @@ void R5(vector<MAR> MAR) {
 
     cout << "Member Name: " << MAR[idx].MemName << endl;
     cout << "Member Number: " << MAR[idx].MemNum << endl;
-    cout << "Statement Date: " << gSystemDate << endl;
+    cout << "Statement Date: " << sysDate << endl;
     cout << "----------------------------------------------------------------" << endl;
 
     cout << "Transaction Summary:" << endl;
@@ -788,7 +818,36 @@ void R5(vector<MAR> MAR) {
         << setw(10) << "Flight"
         << setw(12) << "Cabin"
         << setw(12) << "Departure" << endl;
-    cout << "(No flight record vector available yet)" << endl;
+    cout << "----------------------------------------------------------------" << endl;
+
+    bool anyFlights = false;
+    
+    // Safely check dates
+    if (sysDate.length() >= 10) {
+        int sysDay = stoi(sysDate.substr(0, 2));
+        int sysMonth = stoi(sysDate.substr(3, 2));
+
+        for (size_t i = 0; i < gFlights.size(); i++) {
+            if (gFlights[i].MemNum == acc && gFlights[i].Updated == 0) {
+                
+                int depDay = stoi(gFlights[i].DepartureDate.substr(0, 2));
+                int depMonth = stoi(gFlights[i].DepartureDate.substr(3, 2));
+                
+                if (depMonth > sysMonth || (depMonth == sysMonth && depDay > sysDay)) {
+                    cout << left << setw(14) << gFlights[i].Origin
+                        << setw(14) << gFlights[i].Destination
+                        << setw(10) << gFlights[i].FlightNum
+                        << setw(12) << gFlights[i].CabinClass
+                        << setw(12) << gFlights[i].DepartureDate << endl;
+                    anyFlights = true;
+                }
+            }
+        }
+    }
+
+    if (!anyFlights) {
+        cout << "(No upcoming flights)" << endl;
+    }
     cout << "----------------------------------------------------------------" << endl;
 
     int bonusPct = 0;
@@ -807,6 +866,7 @@ void R5(vector<MAR> MAR) {
     cout << left << setw(40) << "Member Tier" << ": " << MAR[idx].MemTier << endl;
     cout << left << setw(40) << "Bonus Mileage Points" << ": " << bonusPct << "%" << endl;
 }
+
 //R6: Credits and Exit
 void R6() {
 
@@ -834,7 +894,7 @@ void R6() {
         << setw(15) << "Student No."
         << setw(10) << "Tutorial" << endl;
     cout << "----------------------------------------------------------------" << endl;
-    cout << left << setw(25) << "Member Name 1" << setw(15) << "12345671" << setw(10) << "TUT01" << endl;
+    cout << left << setw(25) << "Lam Pak Hei" << setw(15) << "25050310A" << setw(10) << "B06" << endl;
     cout << left << setw(25) << "Member Name 2" << setw(15) << "12345672" << setw(10) << "TUT01" << endl;
     cout << left << setw(25) << "Member Name 3" << setw(15) << "12345673" << setw(10) << "TUT01" << endl;
     cout << left << setw(25) << "Member Name 4" << setw(15) << "12345674" << setw(10) << "TUT01" << endl;
@@ -897,7 +957,7 @@ int main() {
             R4(MAR,date);
             break;
         case 5:
-            R5(MAR);
+            R5(MAR,date);
             break;
         case 6:
             R6();
